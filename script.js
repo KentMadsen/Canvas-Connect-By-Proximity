@@ -35,13 +35,15 @@ function init()
 function initiate_particles()
 {
   for( x = 0;
-       x < 1000;
+       x < 100;
        x ++ )
   {
     var new_particle = getParticle();
 
     new_particle.position.setX( getCanvasWidth() / 2 );
     new_particle.position.setY( getCanvasHeight() / 2 );
+
+    new_particle.setAngle(Math.random()*365);
 
     particles.push( new_particle );
   }
@@ -65,8 +67,8 @@ function calculate()
        x ++)
   {
     var particle = particles[x];
-
   }
+
 
 }
 
@@ -83,12 +85,25 @@ function getCanvasWidth()
 function clean()
 {
   gcanvas.clearRect( 0, 0,
-                     1024, 700 );
+                     getCanvasWidth(), getCanvasHeight() );
 }
 
 function rasterize()
 {
+  for( var x = 0;
+           x < particles.length;
+           x ++ )
+  {
+    var particle = particles[x];
+    draw_position( particle.position.getX(),
+                   particle.position.getY() );
+  }
 
+}
+
+function toRadians( degrees )
+{
+  return degrees * Math.PI / 180;
 }
 
 
@@ -126,8 +141,8 @@ function Vector()
 
   this.length = function()
   {
-    var a = Math.pow(this.x, 2);
-    var b = Math.pow(this.y, 2);
+    var a = Math.pow( this.x, 2 );
+    var b = Math.pow( this.y, 2 );
 
     return Math.sqrt( (a + b) );
   };
@@ -135,11 +150,61 @@ function Vector()
 
 function Particle()
 {
+  // Objects
+  this.angle = 0.0;
+  this.force = 1.0;
+
   this.position = getVector();
   this.velocity = getVector();
 
-  this.angle = 0.0;
+  // Operation
+  this.calculateVelocity =
+    function()
+  {
+    this.applyVelocity( Math.cos( toRadians( this.angle ) ) * this.force,
+                        Math.sin( toRadians( this.angle ) ) * this.force );
+  }
 
+  // Controllers
+  this.applyPosition =
+    function( valueX, valueY )
+  {
+    this.position.setX( valueX );
+    this.position.setY( valueY );
+  }
+
+  this.applyPositionX =
+    function( value )
+  {
+    this.position.setX( value );
+  }
+
+  this.applyPositionY =
+    function( value )
+  {
+    this.position.setY( value );
+  }
+
+  this.applyVelocity =
+    function( valueX, valueY )
+  {
+    this.velocity.setX( valueX );
+    this.velocity.setY( valueY );
+  }
+
+  this.applyVelocityX =
+    function( valueX )
+  {
+      this.velocity.setX( valueX );
+  }
+
+  this.applyVelocityY =
+    function( valueY )
+  {
+      this.velocity.setY( valueY );
+  }
+
+  // Accessor
   this.getAngle = function()
   {
     return this.angle;
@@ -147,7 +212,17 @@ function Particle()
 
   this.setAngle = function( value )
   {
-    this.angle = value;
+    this.angle = value % 360;
+  };
+
+  this.getForce = function()
+  {
+    return this.force;
+  };
+
+  this.setForce = function( value )
+  {
+    this.force = value;
   };
 
 }

@@ -1,0 +1,23 @@
+body
+{
+    margin:0px;
+    padding:0px;
+}
+
+header
+{
+  @extend body;
+
+}
+
+main
+{
+  @extend body;
+
+}
+
+footer
+{
+  @extend body;
+
+}

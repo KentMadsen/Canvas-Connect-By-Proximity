@@ -14,8 +14,8 @@ function draw_position( x, y )
   gcanvas.beginPath();
 
   gcanvas.arc( x, y, // Position
-               1,    // Radius
-               0, 2 * Math.PI);
+               0.5,  // Radius
+               0, 2 * Math.PI );
 
   gcanvas.stroke();
 
@@ -47,8 +47,16 @@ function initiate_particles()
 
     particles.push( new_particle );
   }
+}
 
-  console.log( particles );
+function getCanvasHeight()
+{
+  return gcanvas_id.clientHeight;
+}
+
+function getCanvasWidth()
+{
+  return gcanvas_id.clientWidth;
 }
 
 function draw()
@@ -67,19 +75,12 @@ function calculate()
        x ++)
   {
     var particle = particles[x];
+
+    particle.move();
+
   }
 
 
-}
-
-function getCanvasHeight()
-{
-  return gcanvas_id.clientHeight;
-}
-
-function getCanvasWidth()
-{
-  return gcanvas_id.clientWidth;
 }
 
 function clean()
@@ -95,10 +96,9 @@ function rasterize()
            x ++ )
   {
     var particle = particles[x];
+
     draw_position( particle.position.getX(),
                    particle.position.getY() );
-
-    particle.move();
   }
 
 }
@@ -174,6 +174,19 @@ function Particle()
 
     this.applyPosition( this.position.getX() + this.velocity.getX(),
                         this.position.getY() + this.velocity.getY() );
+  }
+
+  this.predict =
+  function()
+  {
+    this.calculateVelocity();
+
+    var v = new Vector();
+
+    v.setX( this.position.getX() + this.velocity.getX() );
+    v.setY( this.position.getY() + this.velocity.getY() );
+
+    return v;
   }
 
 

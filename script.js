@@ -14,7 +14,7 @@ function draw_position( x, y )
   gcanvas.beginPath();
 
   gcanvas.arc( x, y, // Position
-               2,    // Radius
+               1,    // Radius
                0, 2 * Math.PI);
 
   gcanvas.stroke();
@@ -35,7 +35,7 @@ function init()
 function initiate_particles()
 {
   for( x = 0;
-       x < 100;
+       x < 1000;
        x ++ )
   {
     var new_particle = getParticle();
@@ -43,7 +43,7 @@ function initiate_particles()
     new_particle.position.setX( getCanvasWidth() / 2 );
     new_particle.position.setY( getCanvasHeight() / 2 );
 
-    new_particle.setAngle(Math.random()*365);
+    new_particle.setAngle( Math.random()*365 );
 
     particles.push( new_particle );
   }
@@ -97,6 +97,8 @@ function rasterize()
     var particle = particles[x];
     draw_position( particle.position.getX(),
                    particle.position.getY() );
+
+    particle.move();
   }
 
 }
@@ -152,7 +154,7 @@ function Particle()
 {
   // Objects
   this.angle = 0.0;
-  this.force = 1.0;
+  this.force = 0.25;
 
   this.position = getVector();
   this.velocity = getVector();
@@ -164,6 +166,16 @@ function Particle()
     this.applyVelocity( Math.cos( toRadians( this.angle ) ) * this.force,
                         Math.sin( toRadians( this.angle ) ) * this.force );
   }
+
+  this.move =
+  function()
+  {
+    this.calculateVelocity();
+
+    this.applyPosition( this.position.getX() + this.velocity.getX(),
+                        this.position.getY() + this.velocity.getY() );
+  }
+
 
   // Controllers
   this.applyPosition =

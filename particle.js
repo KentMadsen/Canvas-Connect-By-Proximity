@@ -5,7 +5,7 @@
 function getParticle()
 {
   return new Particle();
-}
+};
 
 function Particle()
 {

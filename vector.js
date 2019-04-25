@@ -41,4 +41,19 @@ function Vector()
 
     return Math.sqrt( (a + b) );
   };
+
+  this.addition = function( vector2 )
+  {
+    var newVector = getVector();
+
+    newVector.setX( ( vector1.getX() + vector2.getX() ) );
+    newVector.setY( ( vector1.getY() + vector2.getY() ) );
+
+  };
+
+  this.scale = function( scalar )
+  {
+    this.setX( scalar * this.getX() );
+    this.setY( scalar * this.getY() );
+  };
 }

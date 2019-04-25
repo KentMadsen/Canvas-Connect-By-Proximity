@@ -1,3 +1,7 @@
+/**
+    Requires: Vector
+*/
+
 function getParticle()
 {
   return new Particle();
@@ -41,7 +45,6 @@ function Particle()
 
     return v;
   }
-
 
   // Controllers
   this.applyPosition =
@@ -102,5 +105,4 @@ function Particle()
   {
     this.force = value;
   };
-
-}
+};

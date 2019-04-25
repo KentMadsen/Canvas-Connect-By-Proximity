@@ -3,6 +3,8 @@ var gcanvas = null;
 
 var particles = [];
 
+var maximum_amount_of_particles = 250;
+
 function main()
 {
   init();
@@ -34,8 +36,10 @@ function init()
 
 function initiate_particles()
 {
+  var x = null;
+
   for( x = 0;
-       x < 1000;
+       x < maximum_amount_of_particles;
        x ++ )
   {
     var new_particle = getParticle();
@@ -70,14 +74,37 @@ function draw()
 
 function calculate()
 {
+  var x = null;
+
   for( x = 0;
        x < particles.length;
-       x ++)
+       x ++ )
   {
     var particle = particles[x];
 
     particle.move();
 
+    //
+    if( particle.position.getY() > getCanvasHeight() )
+    {
+      particle.position.setY( ( particle.position.getY() - getCanvasHeight() ) );
+    }
+
+    if( particle.position.getY() < 0 )
+    {
+      particle.position.setY( ( particle.position.getY() + getCanvasHeight() ) );
+    }
+
+    //
+    if( particle.position.getX() > getCanvasWidth() )
+    {
+        particle.position.setX( ( particle.position.getX() - getCanvasWidth() ) );
+    }
+
+    if( particle.position.getX() < 0 )
+    {
+          particle.position.setX( ( particle.position.getX() + getCanvasWidth() ) );
+    }
   }
 
 
@@ -91,9 +118,11 @@ function clean()
 
 function rasterize()
 {
-  for( var x = 0;
-           x < particles.length;
-           x ++ )
+  var x = null;
+
+  for(  x = 0;
+        x < particles.length;
+        x ++ )
   {
     var particle = particles[x];
 
@@ -101,166 +130,6 @@ function rasterize()
                    particle.position.getY() );
   }
 
-}
-
-function toRadians( degrees )
-{
-  return degrees * Math.PI / 180;
-}
-
-
-// Objects
-function Vector()
-{
-  this.x = 0.0;
-  this.y = 0.0;
-
-  this.reset = function()
-  {
-    this.setX( 0.0 );
-    this.setY( 0.0 );
-  };
-
-  this.getX = function()
-  {
-    return this.x;
-  };
-
-  this.setX = function( value )
-  {
-    this.x = value;
-  }
-
-  this.getY = function()
-  {
-    return this.y;
-  };
-
-  this.setY = function( value )
-  {
-    this.y = value;
-  };
-
-  this.length = function()
-  {
-    var a = Math.pow( this.x, 2 );
-    var b = Math.pow( this.y, 2 );
-
-    return Math.sqrt( (a + b) );
-  };
-}
-
-function Particle()
-{
-  // Objects
-  this.angle = 0.0;
-  this.force = 0.25;
-
-  this.position = getVector();
-  this.velocity = getVector();
-
-  // Operation
-  this.calculateVelocity =
-    function()
-  {
-    this.applyVelocity( Math.cos( toRadians( this.angle ) ) * this.force,
-                        Math.sin( toRadians( this.angle ) ) * this.force );
-  }
-
-  this.move =
-  function()
-  {
-    this.calculateVelocity();
-
-    this.applyPosition( this.position.getX() + this.velocity.getX(),
-                        this.position.getY() + this.velocity.getY() );
-  }
-
-  this.predict =
-  function()
-  {
-    this.calculateVelocity();
-
-    var v = new Vector();
-
-    v.setX( this.position.getX() + this.velocity.getX() );
-    v.setY( this.position.getY() + this.velocity.getY() );
-
-    return v;
-  }
-
-
-  // Controllers
-  this.applyPosition =
-    function( valueX, valueY )
-  {
-    this.position.setX( valueX );
-    this.position.setY( valueY );
-  }
-
-  this.applyPositionX =
-    function( value )
-  {
-    this.position.setX( value );
-  }
-
-  this.applyPositionY =
-    function( value )
-  {
-    this.position.setY( value );
-  }
-
-  this.applyVelocity =
-    function( valueX, valueY )
-  {
-    this.velocity.setX( valueX );
-    this.velocity.setY( valueY );
-  }
-
-  this.applyVelocityX =
-    function( valueX )
-  {
-      this.velocity.setX( valueX );
-  }
-
-  this.applyVelocityY =
-    function( valueY )
-  {
-      this.velocity.setY( valueY );
-  }
-
-  // Accessor
-  this.getAngle = function()
-  {
-    return this.angle;
-  };
-
-  this.setAngle = function( value )
-  {
-    this.angle = value % 360;
-  };
-
-  this.getForce = function()
-  {
-    return this.force;
-  };
-
-  this.setForce = function( value )
-  {
-    this.force = value;
-  };
-
-}
-
-// Fetch
-function getVector()
-{
-  return new Vector();
-}
-
-function getParticle()
-{
-  return new Particle();
 }
 
 main()

@@ -36,7 +36,7 @@ function Vector()
 
   this.length = function()
   {
-    if( a == 0 && b == 0 )
+    if( (a == 0) && (b == 0) )
     {
       return 0;
     }
@@ -76,7 +76,10 @@ function Vector()
   //
   this.scale = function( scalar )
   {
+    //
     this.setX( scalar * this.getX() );
+
+    //
     this.setY( scalar * this.getY() );
   };
 

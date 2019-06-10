@@ -1,17 +1,10 @@
+// Canvas Area
 var gcanvas_id = null;
 var gcanvas = null;
 
-var particles = [];
-
-//
+// Canvas Area
 var maximum_amount_of_particles = 350;
 var kernal = 225;
-
-function main()
-{
-  init();
-  draw();
-}
 
 function getCanvasHeight()
 {
@@ -23,7 +16,7 @@ function getCanvasWidth()
   return gcanvas_id.clientWidth;
 }
 
-
+// Business Logic
 function init()
 {
     var canvas_identity = document.getElementById("proximity");
@@ -45,10 +38,9 @@ function draw()
 
 function calculate()
 {
-  var x = null;
+  //
 
-
-
+  //
 
 }
 
@@ -60,20 +52,14 @@ function clean()
 
 function rasterize()
 {
-  var x = null;
 
-  for(  x = 0;
-        x < particles.length;
-        x ++ )
-  {
-    var particle = particles[x];
+}
 
-    var y = null;
-
-
-
-  }
-
+//
+function main()
+{
+  init();
+  draw();
 }
 
 main()
